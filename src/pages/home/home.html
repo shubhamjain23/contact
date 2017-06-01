@@ -1,14 +1,48 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
-  </ion-navbar>
+  <ion-header>
+  <ion-toolbar color="primary">
+    <ion-title *ngIf="!isEditable">New Contact</ion-title>
+    <ion-title *ngIf="isEditable">Edit Contact</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+
+<ion-list >
+<form [formGroup]="complexForm" >
+  <ion-item>
+    <ion-input type="text" placeholder="Name" [(ngModel)]='contactObject.name' [formControl]="complexForm.controls['name']"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-input type="text" placeholder="Email" [(ngModel)]='contactObject.email' [formControl]="complexForm.controls['email']"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-input type="number" placeholder="Mobile" [(ngModel)]='contactObject.mobile' [formControl]="complexForm.controls['mobile']"></ion-input>
+  </ion-item>
+  
+  <ion-item>
+  <ion-label>Date of Birth</ion-label>
+  <ion-datetime displayFormat="MMM D, YYYY" pickerFormat="MMM D YYYY" [(ngModel)]='contactObject.dob' [formControl]="complexForm.controls['dob']"></ion-datetime>
+</ion-item>
+
+<ion-item>
+  <ion-label>Gender</ion-label>
+  <ion-select [(ngModel)]='contactObject.gender' [formControl]="complexForm.controls['gender']">
+    <ion-option value="female">Female</ion-option>
+    <ion-option value="male">Male</ion-option>
+  </ion-select>
+</ion-item>
+
+<ion-item [hidden]="isEditable">
+    <ion-label>I agree to the terms and policy</ion-label>
+    <ion-checkbox [(ngModel)]='contactObject.agreed' [formControl]="complexForm.controls['agreed']"></ion-checkbox>
+  </ion-item>
+</form>
+</ion-list>
+
+<button type="submit" ion-button color="primary" *ngIf="!isEditable" [disabled]="!complexForm.valid" (click)=submitForm(complexForm.value)>Submit</button>
+<button type="submit" ion-button color="light" *ngIf="isEditable"  (click)=skip()>Skip</button>
+<button type="submit" ion-button color="primary" *ngIf="isEditable" [disabled]="!complexForm.valid" (click)=submitForm(contactObject)>Save details</button>
+
 </ion-content>
